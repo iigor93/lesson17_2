@@ -244,32 +244,38 @@ data = {
 }
 # -------------------------------------------------------
 
-for movie in data["movies"]:
-    m = Movie(
-        id=movie["pk"],
-        title=movie["title"],
-        description=movie["description"],
-        trailer=movie["trailer"],
-        year=movie["year"],
-        rating=movie["rating"],
-        genre_id=movie["genre_id"],
-        director_id=movie["director_id"],
-    )
-    with db.session.begin():
-        db.session.add(m)
+def create_data_db(data, db, Movie, Director, Genre):
+    db.drop_all()
+    db.create_all()
+    for movie in data["movies"]:
+        m = Movie(
+            id=movie["pk"],
+            title=movie["title"],
+            description=movie["description"],
+            trailer=movie["trailer"],
+            year=movie["year"],
+            rating=movie["rating"],
+            genre_id=movie["genre_id"],
+            director_id=movie["director_id"],
+        )
+        with db.session.begin():
+            db.session.add(m)
 
-for director in data["directors"]:
-    d = Director(
-        id=director["pk"],
-        name=director["name"],
-    )
-    with db.session.begin():
-        db.session.add(d)
+    for director in data["directors"]:
+        d = Director(
+            id=director["pk"],
+            name=director["name"],
+        )
+        with db.session.begin():
+            db.session.add(d)
 
-for genre in data["genres"]:
-    d = Genre(
-        id=genre["pk"],
-        name=genre["name"],
-    )
-    with db.session.begin():
-        db.session.add(d)
+    for genre in data["genres"]:
+        d = Genre(
+            id=genre["pk"],
+            name=genre["name"],
+        )
+        with db.session.begin():
+            db.session.add(d)
+
+
+create_data_db(data, db, Movie, Director, Genre)
